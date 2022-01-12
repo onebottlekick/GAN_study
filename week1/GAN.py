@@ -27,6 +27,3 @@ GAN = tf.keras.models.Sequential([
     generator,
     discriminator
 ])
-
-# discriminator -> non trainable
-GAN.layers[1].trainable = False

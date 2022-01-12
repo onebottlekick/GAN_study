@@ -39,6 +39,3 @@ DCGAN = tf.keras.models.Sequential([
     generator,
     discriminator
 ])
-
-# discriminator -> non trainable
-DCGAN.layers[1].trainable = False
