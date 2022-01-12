@@ -34,8 +34,11 @@ discriminator = tf.keras.models.Sequential([
     tf.keras.layers.Flatten(),
     tf.keras.layers.Dense(1, activation='sigmoid')
 ])
+discriminator.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
+discriminator.trainable = False
 DCGAN = tf.keras.models.Sequential([
     generator,
     discriminator
 ])
+DCGAN.compile(loss='binary_crossentropy', optimizer='adam')

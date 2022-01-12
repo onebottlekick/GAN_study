@@ -22,8 +22,12 @@ discriminator = tf.keras.models.Sequential([
     tf.keras.layers.Dense(128, activation='leaky_relu'),
     tf.keras.layers.Dense(1, activation='sigmoid')
 ])
+discriminator.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
+
+discriminator.trainable = False
 GAN = tf.keras.models.Sequential([
     generator,
     discriminator
 ])
+GAN.compile(loss='binary_crossentropy', optimizer='adam')

@@ -25,3 +25,5 @@ output_combined = decoder(encoder(x)[2])
 kl_loss = -0.5*tf.reduce_sum(1 + z_log_var - tf.exp(z_log_var) - tf.square(z_mean), axis=-1)
 VAE = tf.keras.Model(x, output_combined)
 VAE.add_loss(tf.reduce_mean(kl_loss)/784.)
+
+VAE.compile(optimizer='rmsprop', loss="binary_crossentropy")
