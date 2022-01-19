@@ -1,6 +1,5 @@
 from pickletools import optimize
 import tensorflow as tf
-import numpy as np
 
 
 img_shape = (28, 28, 1)
@@ -26,7 +25,6 @@ critic = tf.keras.models.Sequential([
     tf.keras.layers.LeakyReLU(alpha=0.2),
     tf.keras.layers.Dropout(0.25),
     tf.keras.layers.Conv2D(32, kernel_size=3, strides=2, padding="same"),
-    tf.keras.layers.ZeroPadding2D(padding=((0,1),(0,1))),
     tf.keras.layers.BatchNormalization(momentum=0.8),
     tf.keras.layers.LeakyReLU(alpha=0.2),
     tf.keras.layers.Dropout(0.25),
