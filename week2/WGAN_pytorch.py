@@ -14,7 +14,8 @@ class Generator(nn.Module):
             )
         
         self.model = nn.Sequential(
-            _block(z_dim, generator_features*8, kernel_size=4, stride=1, padding=0),
+            _block(z_dim, generator_features*16, kernel_size=4, stride=1, padding=0),
+            _block(generator_features*16, generator_features*8, kernel_size=4, stride=2, padding=1),
             _block(generator_features*8, generator_features*4, kernel_size=4, stride=2, padding=1),
             _block(generator_features*4, generator_features*2, kernel_size=4, stride=2, padding=1),
             nn.ConvTranspose2d(generator_features*2, img_channel, kernel_size=4, stride=2, padding=1),
@@ -32,7 +33,7 @@ class Critic(nn.Module):
         def _block(in_channels, out_channels, kernel_size, stride, padding):
             return nn.Sequential(
                 nn.Conv2d(in_channels, out_channels, kernel_size, stride, padding, bias=False),
-                nn.InstanceNorm2d(out_channels, affine=True),
+                nn.BatchNorm2d(out_channels),
                 nn.LeakyReLU(0.2)
             )
             
@@ -42,7 +43,7 @@ class Critic(nn.Module):
             _block(critic_features, critic_features*2, kernel_size=4, stride=2, padding=1),
             _block(critic_features*2, critic_features*4, kernel_size=4, stride=2, padding=1),
             _block(critic_features*4, critic_features*8, kernel_size=4, stride=2, padding=1),
-            nn.Conv2d(critic_features*8, 1, kernel_size=4, stride=2, padding=1)
+            nn.Conv2d(critic_features*8, 1, kernel_size=4, stride=2, padding=0)
         )
             
     def forward(self, img):
