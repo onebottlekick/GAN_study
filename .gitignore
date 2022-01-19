@@ -3,3 +3,5 @@ models/
 images/
 test.*
 *.pptx
+datasets/
+logs/
