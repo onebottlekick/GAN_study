@@ -67,8 +67,8 @@ class Generator(nn.Module):
             PixelNorm()
         )
         
-        self.initial_rgb = WeightScaledConv2d(in_channels, img_channels, kernel_size=1, stride=1, padding=0)
-        self.prog_blocks, self.rgb_layers = nn.ModuleList(), nn.ModuleList([self.initial_rgb])        
+        self.to_rgb = WeightScaledConv2d(in_channels, img_channels, kernel_size=1, stride=1, padding=0)
+        self.prog_blocks, self.rgb_layers = nn.ModuleList(), nn.ModuleList([self.to_rgb])        
         
         for i in range(len(factors) - 1):
             conv_in_channels = int(in_channels*factors[i])
@@ -83,7 +83,7 @@ class Generator(nn.Module):
         out = self.initial(x)
         
         if steps == 0:
-            return self.initial_rgb(out)
+            return self.to_rgb(out)
         
         for step in range(steps):
             upscaled = nn.Upsample(scale_factor=2, mode='nearest')(out)
@@ -105,8 +105,8 @@ class Critic(nn.Module):
             self.prog_blocks.append(ConvBlock(conv_in_channels, conv_out_channels, use_pexelnorm=False))
             self.rgb_layers.append(WeightScaledConv2d(img_channels, conv_in_channels, kernel_size=1, stride=1, padding=0))
         
-        self.initial_rgb = WeightScaledConv2d(img_channels, in_channels, kernel_size=1, stride=1, padding=0)
-        self.rgb_layers.append(self.initial_rgb)
+        self.to_rgb = WeightScaledConv2d(img_channels, in_channels, kernel_size=1, stride=1, padding=0)
+        self.rgb_layers.append(self.to_rgb)
         self.avg_pool = nn.AvgPool2d(2, 2)
         
         self.final_block = nn.Sequential(
