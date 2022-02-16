@@ -105,8 +105,8 @@ class Critic(nn.Module):
             self.prog_blocks.append(ConvBlock(conv_in_channels, conv_out_channels, use_pexelnorm=False))
             self.rgb_layers.append(WeightScaledConv2d(img_channels, conv_in_channels, kernel_size=1, stride=1, padding=0))
         
-        self.to_rgb = WeightScaledConv2d(img_channels, in_channels, kernel_size=1, stride=1, padding=0)
-        self.rgb_layers.append(self.to_rgb)
+        self.from_rgb = WeightScaledConv2d(img_channels, in_channels, kernel_size=1, stride=1, padding=0)
+        self.rgb_layers.append(self.from_rgb)
         self.avg_pool = nn.AvgPool2d(2, 2)
         
         self.final_block = nn.Sequential(
