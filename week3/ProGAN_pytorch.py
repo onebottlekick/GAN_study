@@ -29,7 +29,7 @@ class WeightScaledConvTranspose2d(nn.Module):
         nn.init.zeros_(self.bias)
         
     def forward(self, x):
-        return self.conv(x*self.scale) + self.bias.view(self.bias.shape[0], 1, 1)
+        return self.conv(x*self.scale) + self.bias.view(1, self.bias.shape[0], 1, 1)
 
 class PixelNorm(nn.Module):
     def __init__(self):
