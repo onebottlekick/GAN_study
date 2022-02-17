@@ -27,7 +27,7 @@ class ImageDataset(Dataset):
         if self.unaligned:
             img_B = Image.open(self.files_B[random.randint(0, len(self.files_B) - 1)])
         else:
-            image_B = Image.open(self.files_B[index%self.files_B])
+            img_B = Image.open(self.files_B[index%len(self.files_B)])
         
         if img_A.mode != 'RGB':
             img_A = to_rgb(img_A)
