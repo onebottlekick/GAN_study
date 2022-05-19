@@ -2,6 +2,7 @@ import random
 
 import torch
 from torch import nn
+from tqdm import tqdm
 
 
 def weights_init_normal(m):
@@ -47,3 +48,10 @@ class LambdaLR:
         
     def step(self, epoch):
         return 1.0 - max(0, epoch + self.offset - self.decay_start_epoch)/(self.n_epochs - self.decay_start_epoch)
+    
+
+class DownloadProgress(tqdm):
+    def update_to(self, b=1, bsize=1, tsize=None):
+        if tsize is not None:
+            self.total = tsize
+        self.update(b*bsize - self.n)

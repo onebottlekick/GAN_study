@@ -51,18 +51,18 @@ def sample_images(batches_done):
     fake_B = G_AB(real_A)
     real_B = torch.tensor(imgs["B"], device=device)
     fake_A = G_BA(real_B)
-    # Arange images along x-axis
+
     real_A = make_grid(real_A, nrow=5, normalize=True)
     real_B = make_grid(real_B, nrow=5, normalize=True)
     fake_A = make_grid(fake_A, nrow=5, normalize=True)
     fake_B = make_grid(fake_B, nrow=5, normalize=True)
-    # Arange images along y-axis
+
     image_grid = torch.cat((real_A, fake_B, real_B, fake_A), 1)
-    save_image(image_grid, "images/%s/%s.png" % (dataset_name, batches_done), normalize=False)
+    save_image(image_grid, f"images/{dataset_name}/{batches_done}.png", normalize=False)
     
 prev_time = time.time()
 for epoch in range(epoch, n_epochs):
-    for i, batch in enumerate(dataloader):
+    for i, batch in enumerate(train_dataloader):
         real_A = torch.tensor(batch['A'], device=device)
         real_B = torch.tensor(batch['B'], device=device)
         
@@ -120,8 +120,8 @@ for epoch in range(epoch, n_epochs):
 
         loss_D = (loss_D_A + loss_D_B) / 2
         
-        batches_done = epoch * len(dataloader) + i
-        batches_left = n_epochs * len(dataloader) - batches_done
+        batches_done = epoch * len(train_dataloader) + i
+        batches_left = n_epochs * len(train_dataloader) - batches_done
         time_left = datetime.timedelta(seconds=batches_left * (time.time() - prev_time))
         prev_time = time.time()
         
@@ -131,7 +131,7 @@ for epoch in range(epoch, n_epochs):
                 epoch,
                 n_epochs,
                 i,
-                len(dataloader),
+                len(train_dataloader),
                 loss_D.item(),
                 loss_G.item(),
                 loss_GAN.item(),

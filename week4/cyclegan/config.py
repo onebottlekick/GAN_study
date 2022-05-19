@@ -32,7 +32,8 @@ lambda_id=5.0
 
 sample_interval=100
 
-dataset_name="horse2zebra"
+dataset_name = 'horse2zebra'
+
 transform = [
     transforms.Resize(int(img_height * 1.12), Image.BICUBIC),
     transforms.RandomCrop((img_height, img_width)),
@@ -40,16 +41,25 @@ transform = [
     transforms.ToTensor(),
     transforms.Normalize([0.5 for _ in range(img_channels)], [0.5 for _ in range(img_channels)])
 ]
-dataloader = DataLoader(
-    ImageDataset("../../datasets/%s" % dataset_name, transform=transform, unaligned=True),
+
+train_dataset =  ImageDataset(transform=transform, unaligned=True, train=True, dataset_name=dataset_name)
+train_dataloader = DataLoader(
+    train_dataset,
     batch_size=batch_size,
     shuffle=True,
 )
+
+val_dataset = ImageDataset(transform=transform, unaligned=True, train=False, dataset_name=dataset_name)
 val_dataloader = DataLoader(
-    ImageDataset("../../datasets/%s" % dataset_name, transform=transform, unaligned=True, mode="test"),
+    val_dataset,
     batch_size=5,
     shuffle=True,
 )
 
-os.makedirs("images/%s" % dataset_name, exist_ok=True)
-os.makedirs("models/%s" % dataset_name, exist_ok=True)
+os.makedirs(f'images/{dataset_name}', exist_ok=True)
+os.makedirs(f'models/{dataset_name}', exist_ok=True)
+
+
+if __name__ == '__main__':
+    dataset = ImageDataset()
+    assert len(dataset) != 0
